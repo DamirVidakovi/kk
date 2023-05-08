@@ -11,5 +11,4 @@ typedef struct Player
 
 Player *createPlayer(char *name, char symbol);
 void freePlayer(Player *player);
-
 #endif // PLAYER_H

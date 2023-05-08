@@ -12,7 +12,7 @@
 int main()
 {
 
-    srand(time(NULL));
+    srand((unsigned)time(NULL));
 
     // create the board
     Board *board = createBoard();

@@ -46,10 +46,12 @@ void printBoard(char **board)
 void freeBoard(Board *board)
 {
     // free the memory
+    
     for (int i = 0; i < 3; i++)
     {
         free(board->board[i]);
     }
+
     free(board->board);
     free(board);
 }
@@ -58,6 +60,7 @@ void isGameOver(Board *board, Player *player1, Player *player2)
 {
     // check if the game is over
     int gameOver = 0;
+    int turn = 0;
     for (int i = 0; i < 3; i++)
     {
         // check rows
