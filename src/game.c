@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -6,7 +8,9 @@
 
 Game *createGame(Board *board, Player *player1, Player *player2)
 {
+    
     Game *game = (Game *)malloc(sizeof(Game));
+    
     game->board = board;
     game->player1 = player1;
     game->player2 = player2;
@@ -43,7 +47,7 @@ void startGame(Game *game)
         printBoard(game->board->board);
 
         // check if the game is over
-        gameOver = isGameOver(game->board->board);
+        gameOver = isGameOver(game->board->board, game->player1->symbol, game->player2->symbol);
 
         // switch turns
         turn = turn == 0 ? 1 : 0;

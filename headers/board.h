@@ -10,10 +10,10 @@ typedef struct Board
 } Board;
 
 
-void createBoard();
+Board *createBoard();
 void printBoard(char **board);
 void freeBoard(Board *board);
-void isGameOver(Board *board, Player *player1, Player *player2);
+int isGameOver(Board *board, Player *player1, Player *player2);
 
 
 #endif // BOARD_H

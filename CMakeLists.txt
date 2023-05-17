@@ -2,7 +2,7 @@
 project(kk)
 
 # set the minimum version of cmake required to build this project
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
 
 
 # add the source files to the project form the src directory

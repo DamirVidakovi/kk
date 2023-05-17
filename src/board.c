@@ -1,10 +1,12 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "../headers/board.h"
 
-void createBoard()
+Board *createBoard()
 {
     printf("Creating board...\n");
 
@@ -24,13 +26,12 @@ void createBoard()
         }
     }
 
- 
+    return (Board *)board;
 }
 
 void printBoard(char **board)
 {
-  
-    // print the board
+    // add the grid 
     printf("  0 1 2\n");
     for (int i = 0; i < 3; i++)
     {
@@ -56,7 +57,7 @@ void freeBoard(Board *board)
     free(board);
 }
 
-void isGameOver(Board *board, Player *player1, Player *player2)
+int isGameOver(Board *board, Player *player1, Player *player2)
 {
     // check if the game is over
     int gameOver = 0;

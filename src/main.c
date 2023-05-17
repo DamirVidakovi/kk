@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 // tic tac toe simulator for the command line
 
 #include <stdio.h>
@@ -15,6 +16,7 @@ int main()
     srand((unsigned)time(NULL));
 
     // create the board
+
     Board *board = createBoard();
 
     // create the players
