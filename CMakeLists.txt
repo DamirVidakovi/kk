@@ -1,5 +1,5 @@
 # set the project name
-project(kk)
+project(krizk)
 
 # set the minimum version of cmake required to build this project
 cmake_minimum_required(VERSION 3.0)
@@ -15,7 +15,7 @@ file(GLOB HEADERS "headers/*.h")
 include_directories(headers)
 
 # add the executable to the project
-add_executable(kk ${SOURCES} ${HEADERS})
+add_executable(krizk ${SOURCES} ${HEADERS})
 
 
 
