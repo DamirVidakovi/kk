@@ -1,5 +1,5 @@
 #define _CRT_SECURE_NO_WARNINGS
-// tic tac toe simulator for the command line
+// izabrao sam camelCase za nazive varijabli i funkcija
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,7 +17,7 @@ int main()
 
     // kreiraneje ploce
 
-    Board *board = createBoard();
+	Board* board = createBoard();
 
     // Kreiranje igraca
     Player *player1 = createPlayer("Player 1", 'X');

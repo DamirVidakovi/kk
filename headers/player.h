@@ -3,6 +3,9 @@
 
 
 #include <string.h>
+
+ //3.Primjena typedef sa strukturama i unijama, po potrebi s enum tipovima podataka tamo gdje treba.
+
 typedef struct Player
 {
     char *name;
