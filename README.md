@@ -21,7 +21,6 @@ Ovo je jednostavan Tik Tak Toe simulator napisan u C-u koji se može igrati u su
 
 #
 ## Faks TODO
-#
 
 ### Obvezni koncepti:
 
