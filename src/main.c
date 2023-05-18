@@ -15,21 +15,21 @@ int main()
 
     srand((unsigned)time(NULL));
 
-    // create the board
+    // kreiraneje ploce
 
     Board *board = createBoard();
 
-    // create the players
+    // Kreiranje igraca
     Player *player1 = createPlayer("Player 1", 'X');
     Player *player2 = createPlayer("Player 2", 'O');
 
-    // create the game
+    // Kreiranje igre
     Game *game = createGame(board, player1, player2);
 
-    // start the game
+    // Pokretanje igre
     startGame(game);
 
-    // free the memory
+  
     freeBoard(board);
     freePlayer(player1);
     freePlayer(player2);

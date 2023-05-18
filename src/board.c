@@ -46,7 +46,15 @@ void printBoard(char **board)
 
 void freeBoard(Board *board)
 {
-    // free the memory
+    //15. Sigurno brisanje memorije koja je dinamički zauzeta, anuliranje memorijskog prostora, provjera 
+    //pokazivača kako se ne bi dogodila pogreška double free() i anuliranje svih pokazivača koji su bili
+    //usmjereni na memorijski prostor koji se dinamički zauzeo.
+    if (board != NULL)
+    {
+        free(board);
+        board = NULL;
+    }
+    
     
     for (int i = 0; i < 3; i++)
     {

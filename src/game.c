@@ -26,7 +26,7 @@ void startGame(Game *game)
 
     // randomly choose who goes first
     int turn = rand() % 2;
-    printf("%s goes first!\n", turn == 0 ? game->player1->name : game->player2->name);
+    printf("%s je prvi na potezu!\n", turn == 0 ? game->player1->name : game->player2->name);
 
     // play the game
     int gameOver = 0;
@@ -59,9 +59,22 @@ void startGame(Game *game)
 
 void freeGame(Game *game)
 {
-    freeBoard(game->board);
-    freePlayer(game->player1);
-    freePlayer(game->player2);
-    free(game);
+
+    //15. Sigurno brisanje memorije koja je dinamički zauzeta, anuliranje memorijskog prostora, provjera 
+    //pokazivača kako se ne bi dogodila pogreška double free() i anuliranje svih pokazivača koji su bili
+    //usmjereni na memorijski prostor koji se dinamički zauzeo.
+
+    if (game != NULL)
+    {
+        freeBoard(game->board);
+        game->board = NULL;
+        freePlayer(game->player1);
+        game->player1 = NULL;
+        freePlayer(game->player2);
+        game->player2 = NULL;
+        free(game);
+        game = NULL;
+    }
+
 }
 

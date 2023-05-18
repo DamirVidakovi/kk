@@ -15,5 +15,16 @@ Player *createPlayer(char *name, char symbol)
 
 void freePlayer(Player *player)
 {
+    //15. Sigurno brisanje memorije koja je dinamički zauzeta, anuliranje memorijskog prostora, provjera 
+    //pokazivača kako se ne bi dogodila pogreška double free() i anuliranje svih pokazivača koji su bili
+    //usmjereni na memorijski prostor koji se dinamički zauzeo.
+    if (player != NULL)
+    {
+        free(player->name);
+        player->name = NULL;
+        free(player);
+        player = NULL;
+    }
+
     free(player);
 }
