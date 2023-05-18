@@ -4,15 +4,18 @@
 Ovo je jednostavan Tik Tak Toe simulator napisan u C-u koji se može igrati u sučelju naredbenog retka. Igru mogu igrati dva igrača koji naizmjence označavaju svoj simbol na mreži 3x3. Igrač koji uspije postaviti tri svoje oznake u vodoravni, okomiti ili dijagonalni red pobjeđuje u igri.
 ## Struktura projekta
 
+
+
+- `CMakeLists.txt` - koristi se za generiranje VS solution
 - `headers/` - header datoteke
-- `src/` - izvorni kod
+- `src/` - root izvornog koda
 - `src/main.c` - glavni program
 - `src/game.c` - funkcije za igru
 - `src/menu.c` - funkcije za izbornik
 - `src/board.c` - funkcije za ploču
 - `src/player.c` - funkcije za igrače
 - `src/save.c` - funkcije za spremanje i učitavanje igre
-    
+
 
 ## TODO
 
@@ -24,9 +27,16 @@ Ovo je jednostavan Tik Tak Toe simulator napisan u C-u koji se može igrati u su
 - [ ] Add save/load functionality
   
 
+## Build
+```bash
+# Generairamo Visual studio solution u folderu build.
+mkdir build
+cd build
+cmake ..
+```    
 ## Kako igrati
 
-1. Prevedite program koristeći C kompajler kao što je `gcc` ili `visual studio`.
+1. Prevedite program koristeći C compiler kao što je `gcc` ili pomocu IDE `Visual Studio`.
 2. Pokrenite prevedenu izvršnu datoteku u sučelju naredbenog retka.
 3. Slijedite upute za igranje igre.
 
