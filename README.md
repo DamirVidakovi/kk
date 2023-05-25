@@ -45,7 +45,7 @@ cmake ..
 
 ### Obvezni koncepti:
 
-- [ ] 1. Odabir konkretnih primitivnih tipova podataka za rad s cjelobrojnim i realnim konstantama.
+- [x] 1. Odabir konkretnih primitivnih tipova podataka za rad s cjelobrojnim i realnim konstantama.
 - [x] 2. Odabir konkretnih složenih tipova podataka za rad sa specifičnim objektima.
 - [x] 3. Primjena typedef sa strukturama i unijama, po potrebi s enum tipovima podataka tamo gdje
 treba.
@@ -54,18 +54,18 @@ camelCase, PascalCase i snake_case konzistento kroz cijeli projekt.
 - [ ] 5. Primjena ključne riječi static za globalne i lokalne varijable.
 - [x] 6. Organizacija izvornog kôda.
 - [ ] 7. Ako su funkcije jednostavne koristiti makro funkcije ili inline funkcije.
-- [ ] 8. Izbornik/podizbornici.
+- [x] 8. Izbornik/podizbornici.
 - [x] 9. Generalno upotreba pokazivača tamo gdje su potrebni.
 - [x] 10. Generalno upotreba struktura i funkcija.
-- [ ] 11. Zaštita parametara kod svih funkcija.
-- [ ] 12. Koristiti statički zauzeta polja.
+- [x] 11. Zaštita parametara kod svih funkcija.
+- [x] 12. Koristiti statički zauzeta polja.
 - [x] 13. Koristiti dinamičko zauzimanje memorije za bilo koji tip podatka, osobito za složene tipove
 podataka.
 - [x] 14. Koristiti funkcije malloc(), calloc(), realloc(), free() – neku od njih, ako ne i sve.
 - [x] 15. Sigurno brisanje memorije koja je dinamički zauzeta, anuliranje memorijskog prostora, provjera
 pokazivača kako se ne bi dogodila pogreška double free() i anuliranje svih pokazivača koji su bili
 usmjereni na memorijski prostor koji se dinamički zauzeo. ([1](https://github.com/DamirVidakovi/kk/blob/dev/src/game.c), [2]())
-- [ ] 16. Datoteke, koristiti tekstualnu ili binarnu, provjera pokazivača i zatvaranje datoteke.
+- [x] 16. Datoteke, koristiti tekstualnu ili binarnu, provjera pokazivača i zatvaranje datoteke.
 - [ ] 17. Koristiti funkcije fseek(), ftell(), rewind(), ovisno o potrebi – neku od njih ako ne sve.
 - [ ] 18. Koristiti funkcije remove(), rename(), po potrebi implementirati funkciju za kopiranje datoteka.
 - [x] 19. Upravljati s pogreškama, errno, perror(), strerror(), feof(), ferror() – neku od njih ako ne sve.
