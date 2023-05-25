@@ -33,7 +33,7 @@ void startGame(Game *game) {
     // print the board
     printBoard(game->board->board);
 
-    // randomly choose who goes first
+    // 
     int turn = rand() % 2;
     printf("%s je prvi na potezu!\n", turn == 0 ? game->player1->name : game->player2->name);
 

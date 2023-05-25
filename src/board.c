@@ -6,27 +6,22 @@
 
 #include "../headers/board.h"
 
-Board *createBoard() {
-    printf("Creating board...\n");
-
-    // allocate memory for board
-    char **board = (char **)malloc(3 * sizeof(char *));
-    for (int i = 0; i < 3; i++) {
-        board[i] = (char *)malloc(3 * sizeof(char));
+char initializeBoard(char **board, int size)
+{
+    // protection
+    if (board == NULL)
+    {
+        perror("Board je NULL");
+        exit(EXIT_FAILURE);
     }
-
     // initialize board
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
+    for (int i = 0; i < size; i++)
+    {
+        for (int j = 0; j < size; j++) {
             board[i][j] = '-';
         }
     }
-
-    // allocate memory for Board struct
-    Board *b = (Board *)malloc(sizeof(Board));
-    b->board = board;
-
-    return b;
+    return board;
 }
 
 void printBoard(char **board)
@@ -47,7 +42,9 @@ void printBoard(char **board)
 
 
 }
-
+/*bool checkRows() {
+    if 
+}*/
 void freeBoard(Board *board)
 {
     //15. Sigurno brisanje memorije koja je dinamički zauzeta, anuliranje memorijskog prostora, provjera 

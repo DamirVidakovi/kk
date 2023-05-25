@@ -7,6 +7,19 @@
 
 Player *createPlayer(char *name, char symbol)
 {
+    if (name == NULL)
+    {
+        perror("Player name is not defined");
+        exit(EXIT_FAILURE);
+    }
+    
+    if (symbol == NULL)
+    {
+        perror("Player symbol is not defined");
+        exit(EXIT_FAILURE);
+    }
+
+
     Player *player = (Player *)malloc(sizeof(Player));
     player->name = name;
     player->symbol = symbol;

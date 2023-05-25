@@ -3,6 +3,9 @@
 
 #include "../headers/player.h"
 
+// define const int board size
+#define BOARD_SIZE 3
+
 typedef struct Board
 {
     char **board;
@@ -10,7 +13,7 @@ typedef struct Board
 } Board;
 
 
-Board *createBoard();
+char initializeBoard(char **board, int size);
 void printBoard(char **board);
 void freeBoard(Board *board);
 int isGameOver(Board *board, Player *player1, Player *player2);

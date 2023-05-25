@@ -17,11 +17,11 @@ void mainMenu() {
         printf("Tik Tak Toe\n");
         printf("-----------\n");
         printf("1. Zapocni novu igru\n");
-        printf("2. Load a saved game\n");
-        printf("3. Save the current game\n");
-        printf("4. View the game rules\n");
+        printf("2. Ucitaj prosle igre\n");
+        printf("3. spremi trenutnu igru\n");
+        printf("4. Prikazi pravila\n");
         printf("5. Exit the game\n");
-        printf("Enter your choice: ");
+        printf("Unesi svoj izbor: ");
         scanf("%d", &choice);
 
         switch (choice) {
@@ -51,8 +51,34 @@ void mainMenu() {
     }
 }
 
-void loadMenu() {
-    
+void playerStats(FILE *fp) {
+
+    fp = fopen("stats.bin", "rb");
+    if (fp == NULL) {
+        perror("Failed to open file");
+        exit(EXIT_FAILURE);
+    }
+
+    int gamesPlayed = 0;
+    int gamesWon = 0;
+    int gamesLost = 0;
+    int gamesDrawn = 0;
+    int winPercentage = 0;
+
+    fread(&gamesPlayed, sizeof(int), 1, fp);
+    fread(&gamesWon, sizeof(int), 1, fp);
+    fread(&gamesLost, sizeof(int), 1, fp);
+    fread(&gamesDrawn, sizeof(int), 1, fp);
+    fread(&winPercentage, sizeof(int), 1, fp);
+
+    printf("Broj odigranih igara: %d\n", gamesPlayed);
+    printf("Broj pobjeda: %d\n", gamesWon);
+    printf("Broj poraza: %d\n", gamesLost);
+    printf("Broj nerijesenih: %d\n", gamesDrawn);
+    printf("Postotak pobjeda: %d\n", winPercentage);
+
+    fclose(fp);
+
 }
 void pravila() {
     printf("Pravila igre:\n");

@@ -10,6 +10,7 @@ typedef struct Player
 {
     char *name;
     char symbol;
+    int score;
 } Player;
 
 Player *createPlayer(char *name, char symbol);
