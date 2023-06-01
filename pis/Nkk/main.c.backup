@@ -1,0 +1,140 @@
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#define BOARD_SIZE 3
+
+static char** create_board() {
+	char** board = (char**)malloc(BOARD_SIZE * sizeof(char*));
+	for (int i = 0; i < BOARD_SIZE; i++) {
+		board[i] = (char*)malloc(BOARD_SIZE * sizeof(char));
+		for (int j = 0; j < BOARD_SIZE; j++) {
+			board[i][j] = ' ';
+		}
+	}
+	return board;
+}
+
+static void destroy_board(char** board) {
+	for (int i = 0; i < BOARD_SIZE; i++) {
+		free(board[i]);
+	}
+	free(board);
+}
+
+static void display_board(char** board) {
+	for (int i = 0; i < BOARD_SIZE; i++) {
+		for (int j = 0; j < BOARD_SIZE; j++) {
+			printf("%c ", board[i][j]);
+		}
+		printf("\n");
+	}
+}
+
+static inline bool is_valid_move(char** board, int row, int col) {
+	if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE) {
+		return false;
+	}
+	if (board[row][col] != ' ') {
+		return false;
+	}
+	return true;
+}
+
+static bool check_win(char** board, char symbol) {
+	// check rows
+	for (int i = 0; i < BOARD_SIZE; i++) {
+		bool win = true;
+		for (int j = 0; j < BOARD_SIZE; j++) {
+			if (board[i][j] != symbol) {
+				win = false;
+				break;
+			}
+		}
+		if (win) {
+			return true;
+		}
+	}
+	// check columns
+	for (int j = 0; j < BOARD_SIZE; j++) {
+		bool win = true;
+		for (int i = 0; i < BOARD_SIZE; i++) {
+			if (board[i][j] != symbol) {
+				win = false;
+				break;
+			}
+		}
+		if (win) {
+			return true;
+		}
+	}
+	// check diagonals
+	bool win = true;
+	for (int i = 0; i < BOARD_SIZE; i++) {
+		if (board[i][i] != symbol) {
+			win = false;
+			break;
+		}
+	}
+	if (win) {
+		return true;
+	}
+	win = true;
+	for (int i = 0; i < BOARD_SIZE; i++) {
+		if (board[i][BOARD_SIZE - i - 1] != symbol) {
+			win = false;
+			break;
+		}
+	}
+	if (win) {
+		return true;
+	}
+	return false;
+}
+
+int main() {
+	// create board
+	char** board = create_board();
+	// initialize players
+	char player1 = 'X';
+	char player2 = 'O';
+	char current_player = player1;
+	// game loop
+	while (true) {
+		// display board
+		display_board(board);
+		// get user input
+		int row, col;
+		printf("Player %c's turn\n", current_player);
+		printf("Enter row (0-%d): ", BOARD_SIZE - 1);
+		scanf("%d", &row);
+		printf("Enter column (0-%d): ", BOARD_SIZE - 1);
+		scanf("%d", &col);
+		// check if move is valid
+		if (!is_valid_move(board, row, col)) {
+			printf("Invalid move, try again\n");
+			continue;
+		}
+		// update board
+		board[row][col] = current_player;
+		// check for win
+		if (check_win(board, current_player)) {
+			printf("Player %c wins!\n", current_player);
+			break;
+		}
+		// switch players
+		if (current_player == player1) {
+			current_player = player2;
+		}
+		else {
+			current_player = player1;
+		}
+	}
+	// display final board
+	display_board(board);
+	// free memory
+	destroy_board(board);
+	return 0;
+}

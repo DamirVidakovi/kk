@@ -1,0 +1,297 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
+
+#define BOARD_SIZE 3
+#define MAX_SAVED_GAMES 10
+
+typedef struct {
+	char symbol;
+} Player;
+
+typedef struct {
+	char** board;
+	Player player1;
+	Player player2;
+	Player* current_player;
+} Game;
+
+typedef struct {
+	Game* game;
+	char* filename;
+} SavedGame;
+
+static SavedGame saved_games[MAX_SAVED_GAMES];
+static int num_saved_games = 0;
+
+static Game* create_game() {
+	if (BOARD_SIZE <= 0) {
+		printf("Invalid board size\n");
+		return NULL;
+	}
+	Game* game = (Game*)malloc(sizeof(Game));
+	game->board = (char**)malloc(BOARD_SIZE * sizeof(char*));
+	for (int i = 0; i < BOARD_SIZE; i++) {
+		game->board[i] = (char*)malloc(BOARD_SIZE * sizeof(char));
+		for (int j = 0; j < BOARD_SIZE; j++) {
+			game->board[i][j] = ' ';
+		}
+	}
+	game->player1.symbol = 'X';
+	game->player2.symbol = 'O';
+	game->current_player = &game->player1;
+	return game;
+}
+
+static void destroy_game(Game* game) {
+	for (int i = 0; i < BOARD_SIZE; i++) {
+		free(game->board[i]);
+		game->board[i] = NULL;
+	}
+	free(game->board);
+	game->board = NULL;
+	free(game);
+	game = NULL;
+}
+
+static void display_board(char** board) {
+	for (int i = 0; i < BOARD_SIZE; i++) {
+		for (int j = 0; j < BOARD_SIZE; j++) {
+			printf("%c ", board[i][j]);
+		}
+		printf("\n");
+	}
+}
+
+static inline bool is_valid_move(char** board, int row, int col) {
+	if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE) {
+		return false;
+	}
+	if (board[row][col] != ' ') {
+		return false;
+	}
+	return true;
+}
+
+static bool check_win(char** board, char symbol) {
+	// check rows
+	for (int i = 0; i < BOARD_SIZE; i++) {
+		bool win = true;
+		for (int j = 0; j < BOARD_SIZE; j++) {
+			if (board[i][j] != symbol) {
+				win = false;
+				break;
+			}
+		}
+		if (win) {
+			return true;
+		}
+	}
+	// check columns
+	for (int j = 0; j < BOARD_SIZE; j++) {
+		bool win = true;
+		for (int i = 0; i < BOARD_SIZE; i++) {
+			if (board[i][j] != symbol) {
+				win = false;
+				break;
+			}
+		}
+		if (win) {
+			return true;
+		}
+	}
+	// check diagonals
+	bool win = true;
+	for (int i = 0; i < BOARD_SIZE; i++) {
+		if (board[i][i] != symbol) {
+			win = false;
+			break;
+		}
+	}
+	if (win) {
+		return true;
+	}
+	win = true;
+	for (int i = 0; i < BOARD_SIZE; i++) {
+		if (board[i][BOARD_SIZE - i - 1] != symbol) {
+			win = false;
+			break;
+		}
+	}
+	if (win) {
+		return true;
+	}
+	return false;
+}
+
+static void save_game(Game* game, const char* filename) {
+	FILE* file = fopen(filename, "wb");
+	if (file == NULL) {
+		printf("Error: could not open file %s for writing\n", filename);
+		return;
+	}
+	fwrite(game, sizeof(Game), 1, file);
+	fclose(file);
+	printf("Game saved to %s\n", filename);
+}
+
+static Game* load_game(const char* filename) {
+	FILE* file = fopen(filename, "rb");
+	if (file == NULL) {
+		printf("Error: could not open file %s for reading\n", filename);
+		return NULL;
+	}
+	Game* game = (Game*)malloc(sizeof(Game));
+	fread(game, sizeof(Game), 1, file);
+	fclose(file);
+	printf("Game loaded from %s\n", filename);
+	return game;
+}
+
+static void list_saved_games() {
+	printf("Saved games:\n");
+	for (int i = 0; i < num_saved_games; i++) {
+		printf("%d. %s\n", i + 1, saved_games[i].filename);
+	}
+}
+
+static void save_game_prompt(Game* game) {
+	char filename[256];
+	printf("Enter filename to save game: ");
+	scanf("%s", filename);
+	save_game(game, filename);
+}
+
+static void load_game_prompt() {
+	list_saved_games();
+	int choice;
+	printf("Enter number of game to load: ");
+	scanf("%d", &choice);
+	if (choice < 1 || choice > num_saved_games) {
+		printf("Invalid choice\n");
+		return;
+	}
+	Game* game = load_game(saved_games[choice - 1].filename);
+	if (game != NULL) {
+		destroy_game(game);
+	}
+}
+
+int main() {
+	// load saved games
+	FILE* index_file = fopen("saved_games_index.bin", "rb");
+	if (index_file != NULL) {
+		fread(&num_saved_games, sizeof(int), 1, index_file);
+		for (int i = 0; i < num_saved_games; i++) {
+			char filename[256];
+			fread(filename, sizeof(char), 256, index_file);
+			Game* game = load_game(filename);
+			if (game != NULL) {
+				saved_games[i].game = game;
+				saved_games[i].filename = (char*)malloc(256 * sizeof(char));
+				strcpy(saved_games[i].filename, filename);
+			}
+		}
+		fclose(index_file);
+	}
+	// create game
+	Game* game = create_game();
+	// game loop
+	while (true) {
+		// display board
+		display_board(game->board);
+		// get user input
+		int row, col;
+		printf("Player %c's turn\n", game->current_player->symbol);
+		printf("Enter row (0-%d): ", BOARD_SIZE - 1);
+		scanf("%d", &row);
+		printf("Enter column (0-%d): ", BOARD_SIZE - 1);
+		scanf("%d", &col);
+		// check if move is valid
+		if (!is_valid_move(game->board, row, col)) {
+			printf("Invalid move, try again\n");
+			continue;
+		}
+		// update board
+		game->board[row][col] = game->current_player->symbol;
+		// check for win
+		if (check_win(game->board, game->current_player->symbol)) {
+			printf("Player %c wins!\n", game->current_player->symbol);
+			break;
+		}
+		// switch players
+		if (game->current_player == &game->player1) {
+			game->current_player = &game->player2;
+		}
+		else {
+			game->current_player = &game->player1;
+		}
+	}
+	// display final board
+	display_board(game->board);
+	// prompt user to save game
+	save_game_prompt(game);
+	// prompt user to load game
+	load_game_prompt();
+	// free memory
+	destroy_game(game);
+	for (int i = 0; i < num_saved_games; i++) {
+		free(saved_games[i].filename);
+		saved_games[i].filename = NULL;
+		destroy_game(saved_games[i].game);
+		saved_games[i].game = NULL;
+	}
+	// save index of saved games
+	index_file = fopen("saved_games_index.bin", "wb");
+	if (index_file != NULL) {
+		fwrite(&num_saved_games, sizeof(int), 1, index_file);
+		for (int i = 0; i < num_saved_games; i++) {
+			fwrite(saved_games[i].filename, sizeof(char), 256, index_file);
+		}
+		fclose(index_file);
+	}
+
+	// Remove a file
+	if (remove("saved_games_index.bin") == 0) {
+		printf("File deleted successfully\n");
+	}
+	else {
+		printf("Error: unable to delete the file\n");
+	}
+
+	// Rename a file
+	if (rename("game.txt", "new_game.txt") == 0) {
+		printf("File renamed successfully\n");
+	}
+	else {
+		printf("Error: unable to rename the file\n");
+	}
+
+	// Copy a file
+	FILE* source_file, * target_file;
+	char source_path[100], target_path[100];
+	printf("Enter source file path: ");
+	scanf("%s", source_path);
+	printf("Enter target file path: ");
+	scanf("%s", target_path);
+	source_file = fopen(source_path, "r");
+	target_file = fopen(target_path, "w");
+	if (source_file == NULL) {
+		printf("Error: unable to open the source file\n");
+		return 1;
+	}
+	if (target_file == NULL) {
+		printf("Error: unable to open the target file\n");
+		return 1;
+	}
+	char c;
+	while ((c = fgetc(source_file)) != EOF) {
+		fputc(c, target_file);
+	}
+	printf("File copied successfully\n");
+	fclose(source_file);
+	fclose(target_file);
+
+	return 0;
+}
