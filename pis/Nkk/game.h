@@ -21,6 +21,7 @@ typedef struct {
 typedef struct {
 	Game* game;
 	char* filename;
+	
 } SavedGame;
 
 static SavedGame saved_games[MAX_SAVED_GAMES];

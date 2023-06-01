@@ -23,6 +23,10 @@ Game* create_game() {
 }
 
 void destroy_game(Game* game) {
+	if (game == NULL) {
+		perror("Error: game is NULL\n");
+		return;
+	}
 	for (int i = 0; i < BOARD_SIZE; i++) {
 		free(game->board[i]);
 		game->board[i] = NULL;
@@ -34,15 +38,27 @@ void destroy_game(Game* game) {
 }
 
 void display_board(char** board) {
-	for (int i = 0; i < BOARD_SIZE; i++) {
-		for (int j = 0; j < BOARD_SIZE; j++) {
-			printf("%c ", board[i][j]);
-		}
-		printf("\n");
-	}
+
+    // protection 
+    if (board == NULL)
+    {
+        perror("Board je NULL");
+        exit(EXIT_FAILURE);
+    }
+    printf("   1   2   3\n");
+    printf("1  %c | %c | %c \n", board[0][0], board[0][1], board[0][2]);
+    printf("  ---+---+---\n");
+    printf("2  %c | %c | %c \n", board[1][0], board[1][1], board[1][2]);
+    printf("  ---+---+---\n");
+    printf("3  %c | %c | %c \n", board[2][0], board[2][1], board[2][2]);
+	
 }
 
 bool is_valid_move(char** board, int row, int col) {
+	if (board == NULL) {
+		perror("Error: board is NULL\n");
+		return false;
+	}
 	if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE) {
 		return false;
 	}
@@ -53,6 +69,10 @@ bool is_valid_move(char** board, int row, int col) {
 }
 
 bool check_win(char** board, char symbol) {
+	if (board == NULL) {
+		perror("Error: board is NULL\n");
+		return false;
+	}
 	// check rows
 	for (int i = 0; i < BOARD_SIZE; i++) {
 		bool win = true;
@@ -104,6 +124,10 @@ bool check_win(char** board, char symbol) {
 }
 
 void save_game(Game* game, const char* filename) {
+	if (game == NULL) {
+		perror("Error: game is NULL\n");
+		return;
+	}
 	FILE* file = fopen(filename, "wb");
 	if (file == NULL) {
 		printf("Error: could not open file %s for writing\n", filename);
@@ -135,6 +159,16 @@ void list_saved_games() {
 }
 
 void save_game_prompt(Game* game) {
+	if (game == NULL) {
+		perror("Error: game is NULL\n");
+		return;
+	}
+
+	// check if we have space for another saved game
+	if (num_saved_games == MAX_SAVED_GAMES) {
+		perror("Error: no space for another saved game\n");
+		return;
+	}
 	char filename[256];
 	printf("Enter filename to save game: ");
 	scanf("%s", filename);
