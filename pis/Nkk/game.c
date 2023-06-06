@@ -46,7 +46,12 @@ void genCompMove(Game* game, int* row, int* col) {
         *col = rand() % BOARD_SIZE;
     }
 }
-
+void destroy_game(Game* game) {
+	if (game == NULL) {
+		perror("Error: game is NULL\n");
+		return;
+	}
+}
 
 void startGame(Game* game, int mode) {
 		while (true) {

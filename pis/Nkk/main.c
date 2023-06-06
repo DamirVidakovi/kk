@@ -23,7 +23,7 @@ int main() {
 	// create game
 	Game* game = create_game();
 
-	displayMenu(game);
+	displayMenu(game, mode);
 
 	for (int i = 0; i < num_saved_games; i++) {
 		free(saved_games[i].filename);

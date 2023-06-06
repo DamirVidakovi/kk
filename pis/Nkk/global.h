@@ -8,5 +8,7 @@
 #include <string.h>
 #include <stdbool.h>
 
+int mode = 2;
+
 
 #endif // !GLOBAL_H

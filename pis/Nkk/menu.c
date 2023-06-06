@@ -15,7 +15,7 @@ void help() {
 	printf("Ako su sva polja označena i nijedan igrač nije pobijedio, igra je neriješena.\n");
 
 }
-void loadSubMenu(Game* game) {
+void loadSubMenu(Game* game, int mode) {
 	printf("1. Show previus Games\n");
 
 	printf("2. Delete Game\n");
@@ -36,7 +36,7 @@ void loadSubMenu(Game* game) {
 		break;
 	case 3:
 		// back
-		displayMenu(game);
+		displayMenu(game, mode);
 		break;
 	default:
 		printf("Invalid choice\n");
@@ -44,7 +44,7 @@ void loadSubMenu(Game* game) {
 	}
 }
 
-void displayMenu(Game* game) {
+void displayMenu(Game* game,int mode) {
 	// new game
 // load game
 // list saved games
@@ -63,12 +63,12 @@ void displayMenu(Game* game) {
 	switch (choice) {
 	case 1:
 		// new game
-		int mode = choseMode();
+		
 		startGame(game, mode);
 		break;
 	case 2:
 		// load game
-		loadSubMenu(game);
+		loadSubMenu(game, mode);
 		break;
 	case 3:
 		// high scores
@@ -76,7 +76,7 @@ void displayMenu(Game* game) {
 	case 4:
 		// help
 		help();
-		displayMenu(game);
+		displayMenu(game, mode);
 		
 	case 5:
 		// quit
