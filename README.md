@@ -51,10 +51,10 @@ cmake ..
 treba.
 - [x] 4. Imenovanje identifikatora (varijabli, konstanti, polja, funkcija, pokazivača…) – upotreba
 camelCase, PascalCase i snake_case konzistento kroz cijeli projekt.
-- [ ] 5. Primjena ključne riječi static za globalne i lokalne varijable.
+- [x] 5. Primjena ključne riječi static za globalne i lokalne varijable.
 - [x] 6. Organizacija izvornog kôda.
-- [ ] 7. Ako su funkcije jednostavne koristiti makro funkcije ili inline funkcije.
-- [x] 8. Izbornik/podizbornici.
+- [x] 7. Ako su funkcije jednostavne koristiti makro funkcije ili inline funkcije.
+- [ ] 8. Izbornik/podizbornici.
 - [x] 9. Generalno upotreba pokazivača tamo gdje su potrebni.
 - [x] 10. Generalno upotreba struktura i funkcija.
 - [x] 11. Zaštita parametara kod svih funkcija.

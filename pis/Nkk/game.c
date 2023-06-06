@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include "game.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,12 +23,84 @@ Game* create_game() {
 	game->current_player = &game->player1;
 	return game;
 }
+int choseMode() {
+	int mode;
+	printf("Chose mode:\n");
+	printf("1. Player vs Player\n");
+	printf("2. Player vs Computer\n");
+	printf("3. Computer vs Computer\n");
+	scanf("%d", &mode);
+	return mode;
+}
+// function to generate a random move for the computer player
+void genCompMove(Game* game, int* row, int* col) {
+    // seed the random number generator
+    srand(time(NULL));
+    // generate random row and column
+    *row = rand() % BOARD_SIZE;
+    *col = rand() % BOARD_SIZE;
+    // check if move is valid
+    while (!is_valid_move(game->board, *row, *col)) {
+        // generate new random row and column
+        *row = rand() % BOARD_SIZE;
+        *col = rand() % BOARD_SIZE;
+    }
+}
 
-void destroy_game(Game* game) {
-	if (game == NULL) {
-		perror("Error: game is NULL\n");
-		return;
-	}
+
+void startGame(Game* game, int mode) {
+		while (true) {
+			// display board
+			display_board(game->board);
+			// get user input or generate computer move
+			int row, col;
+			if (game->current_player == &game->player1 || mode == 1) {
+				printf("Player %c's turn\n", game->current_player->symbol);
+				printf("Enter row (0-%d): ", BOARD_SIZE - 1);
+				scanf("%d", &row);
+				printf("Enter column (0-%d): ", BOARD_SIZE - 1);
+				scanf("%d", &col);
+			} else if (game->current_player == &game->player2 && mode == 2) {
+				printf("Computer's turn\n");
+				genCompMove(game, &row, &col);
+				printf("Computer chose row %d, column %d\n", row, col);
+			} else {
+				printf("Computer 1's turn\n");
+				genCompMove(game, &row, &col);
+				printf("Computer 1 chose row %d, column %d\n", row, col);
+			}
+			// check if move is valid
+			if (!is_valid_move(game->board, row, col)) {
+				printf("Invalid move, try again\n");
+				continue;
+			}
+			// update board
+			game->board[row][col] = game->current_player->symbol;
+			// check for win
+			if (check_win(game->board, game->current_player->symbol)) {
+				printf("Player %c wins!\n", game->current_player->symbol);
+				break;
+			}
+			// switch players
+			if (game->current_player == &game->player1) {
+				game->current_player = &game->player2;
+			}
+			else if (game->current_player == &game->player2 && mode != 3) {
+				game->current_player = &game->player1;
+			} else {
+				game->current_player = &game->player2;
+			}
+		}
+		// display final board
+		display_board(game->board);
+		// prompt user to save game
+		save_game_prompt(game);
+		// prompt user to load game
+		load_game_prompt();
+		// free memory
+		destroy_game(game);
+	
+	
 	for (int i = 0; i < BOARD_SIZE; i++) {
 		free(game->board[i]);
 		game->board[i] = NULL;
@@ -39,18 +113,18 @@ void destroy_game(Game* game) {
 
 void display_board(char** board) {
 
-    // protection 
+    // protection W
     if (board == NULL)
     {
         perror("Board je NULL");
         exit(EXIT_FAILURE);
     }
-    printf("   1   2   3\n");
-    printf("1  %c | %c | %c \n", board[0][0], board[0][1], board[0][2]);
+    printf("   0   1   2\n");
+    printf("0  %c | %c | %c \n", board[0][0], board[0][1], board[0][2]);
     printf("  ---+---+---\n");
-    printf("2  %c | %c | %c \n", board[1][0], board[1][1], board[1][2]);
+    printf("1  %c | %c | %c \n", board[1][0], board[1][1], board[1][2]);
     printf("  ---+---+---\n");
-    printf("3  %c | %c | %c \n", board[2][0], board[2][1], board[2][2]);
+    printf("2  %c | %c | %c \n", board[2][0], board[2][1], board[2][2]);
 	
 }
 
@@ -123,69 +197,3 @@ bool check_win(char** board, char symbol) {
 	return false;
 }
 
-void save_game(Game* game, const char* filename) {
-	if (game == NULL) {
-		perror("Error: game is NULL\n");
-		return;
-	}
-	FILE* file = fopen(filename, "wb");
-	if (file == NULL) {
-		printf("Error: could not open file %s for writing\n", filename);
-		return;
-	}
-	fwrite(game, sizeof(Game), 1, file);
-	fclose(file);
-	printf("Game saved to %s\n", filename);
-}
-
-Game* load_game(const char* filename) {
-	FILE* file = fopen(filename, "rb");
-	if (file == NULL) {
-		printf("Error: could not open file %s for reading\n", filename);
-		return NULL;
-	}
-	Game* game = (Game*)malloc(sizeof(Game));
-	fread(game, sizeof(Game), 1, file);
-	fclose(file);
-	printf("Game loaded from %s\n", filename);
-	return game;
-}
-
-void list_saved_games() {
-	printf("Saved games:\n");
-	for (int i = 0; i < num_saved_games; i++) {
-		printf("%d. %s\n", i + 1, saved_games[i].filename);
-	}
-}
-
-void save_game_prompt(Game* game) {
-	if (game == NULL) {
-		perror("Error: game is NULL\n");
-		return;
-	}
-
-	// check if we have space for another saved game
-	if (num_saved_games == MAX_SAVED_GAMES) {
-		perror("Error: no space for another saved game\n");
-		return;
-	}
-	char filename[256];
-	printf("Enter filename to save game: ");
-	scanf("%s", filename);
-	save_game(game, filename);
-}
-
-void load_game_prompt() {
-	list_saved_games();
-	int choice;
-	printf("Enter number of game to load: ");
-	scanf("%d", &choice);
-	if (choice < 1 || choice > num_saved_games) {
-		printf("Invalid choice\n");
-		return;
-	}
-	Game* game = load_game(saved_games[choice - 1].filename);
-	if (game != NULL) {
-		destroy_game(game);
-	}
-}

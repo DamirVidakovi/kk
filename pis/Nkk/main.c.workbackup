@@ -252,46 +252,5 @@ int main() {
 		fclose(index_file);
 	}
 
-	// Remove a file
-	if (remove("saved_games_index.bin") == 0) {
-		printf("File deleted successfully\n");
-	}
-	else {
-		printf("Error: unable to delete the file\n");
-	}
-
-	// Rename a file
-	if (rename("game.txt", "new_game.txt") == 0) {
-		printf("File renamed successfully\n");
-	}
-	else {
-		printf("Error: unable to rename the file\n");
-	}
-
-	// Copy a file
-	FILE* source_file, * target_file;
-	char source_path[100], target_path[100];
-	printf("Enter source file path: ");
-	scanf("%s", source_path);
-	printf("Enter target file path: ");
-	scanf("%s", target_path);
-	source_file = fopen(source_path, "r");
-	target_file = fopen(target_path, "w");
-	if (source_file == NULL) {
-		printf("Error: unable to open the source file\n");
-		return 1;
-	}
-	if (target_file == NULL) {
-		printf("Error: unable to open the target file\n");
-		return 1;
-	}
-	char c;
-	while ((c = fgetc(source_file)) != EOF) {
-		fputc(c, target_file);
-	}
-	printf("File copied successfully\n");
-	fclose(source_file);
-	fclose(target_file);
-
 	return 0;
 }

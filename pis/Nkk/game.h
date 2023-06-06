@@ -27,6 +27,7 @@ typedef struct {
 static SavedGame saved_games[MAX_SAVED_GAMES];
 static int num_saved_games = 0;
 
+void startGame(Game* game, mode);
 Game* create_game();
 void destroy_game(Game* game);
 void display_board(char** board);
