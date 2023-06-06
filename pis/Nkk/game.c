@@ -1,7 +1,10 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include "game.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+
 
 Game* create_game() {
 	if (BOARD_SIZE <= 0) {
@@ -22,6 +25,36 @@ Game* create_game() {
 	return game;
 }
 
+void StartGame() {
+Game* game = create_game();
+	while (true) {
+		display_board(game->board);
+		int row, col;
+		printf("Player %c's turn\n", game->current_player->symbol);
+		printf("Enter row (0-%d): ", BOARD_SIZE - 1);
+		scanf("%d", &row);
+		printf("Enter column (0-%d): ", BOARD_SIZE - 1);
+		scanf("%d", &col);
+		if (!is_valid_move(game->board, row, col)) {
+			printf("Invalid move, try again\n");
+			continue;
+		}
+		game->board[row][col] = game->current_player->symbol;
+		if (check_win(game->board, game->current_player->symbol)) {
+			printf("Player %c wins!\n", game->current_player->symbol);
+			break;
+		}
+		if (game->current_player == &game->player1) {
+			game->current_player = &game->player2;
+		}
+		else {
+			game->current_player = &game->player1;
+		}
+	}
+	display_board(game->board);
+	save_game_prompt(game);
+	destroy_game(game);
+}
 void destroy_game(Game* game) {
 	if (game == NULL) {
 		perror("Error: game is NULL\n");
@@ -189,3 +222,72 @@ void load_game_prompt() {
 		destroy_game(game);
 	}
 }
+
+void add_to_linked_list(LinkedList* list, Game* game) {
+	if (list == NULL) {
+		perror("Error: list is NULL\n");
+		return;
+	}
+	if (game == NULL) {
+		perror("Error: game is NULL\n");
+		return;
+	}
+	Node* new_node = (Node*)malloc(sizeof(Node));
+	new_node->game = game;
+	new_node->next = NULL;
+	if (list->head == NULL) {
+		list->head = new_node;
+		list->tail = new_node;
+	}
+	else {
+		list->tail->next = new_node;
+		list->tail = new_node;
+	}
+}
+
+void remove_from_linked_list(LinkedList* list, Game* game) {
+	if (list == NULL) {
+		perror("Error: list is NULL\n");
+		return;
+	}
+	if (game == NULL) {
+		perror("Error: game is NULL\n");
+		return;
+	}
+	Node* prev = NULL;
+	Node* curr = list->head;
+	while (curr != NULL) {
+		if (curr->game == game) {
+			if (prev == NULL) {
+				list->head = curr->next;
+			}
+			else {
+				prev->next = curr->next;
+			}
+			if (curr == list->tail) {
+				list->tail = prev;
+			}
+			free(curr);
+			return;
+		}
+		prev = curr;
+		curr = curr->next;
+	}
+}
+
+void traverse_linked_list(LinkedList* list, void (*callback)(Game*)) {
+	if (list == NULL) {
+		perror("Error: list is NULL\n");
+		return;
+	}
+	if (callback == NULL) {
+		perror("Error: callback is NULL\n");
+		return;
+	}
+	Node* curr = list->head;
+	while (curr != NULL) {
+		callback(curr->game);
+		curr = curr->next;
+	}
+}
+
