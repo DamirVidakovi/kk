@@ -1,8 +1,10 @@
 #define _CRT_SECURE_NO_WARNINGS
-#include "game.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "game.h"
 
 int main() {
 	// load saved games
@@ -21,41 +23,11 @@ int main() {
 		}
 		fclose(index_file);
 	}
-	// create game
+
 	Game* game = create_game();
-	// game loop
-	while (true) {
-		// display board
-		display_board(game->board);
-		// get user input
-		int row, col;
-		printf("Player %c's turn\n", game->current_player->symbol);
-		printf("Enter row (0-%d): ", BOARD_SIZE - 1);
-		scanf("%d", &row);
-		printf("Enter column (0-%d): ", BOARD_SIZE - 1);
-		scanf("%d", &col);
-		// check if move is valid
-		if (!is_valid_move(game->board, row, col)) {
-			printf("Invalid move, try again\n");
-			continue;
-		}
-		// update board
-		game->board[row][col] = game->current_player->symbol;
-		// check for win
-		if (check_win(game->board, game->current_player->symbol)) {
-			printf("Player %c wins!\n", game->current_player->symbol);
-			break;
-		}
-		// switch players
-		if (game->current_player == &game->player1) {
-			game->current_player = &game->player2;
-		}
-		else {
-			game->current_player = &game->player1;
-		}
-	}
-	// display final board
-	display_board(game->board);
+
+	// create game
+	StartGame(game);
 	// prompt user to save game
 	save_game_prompt(game);
 	// prompt user to load game

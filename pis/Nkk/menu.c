@@ -48,6 +48,8 @@ void loadSubMenu() {
 	printf("1. Show previus Games\n");
 
 	printf("2. Delete Game\n");
+	// remove save file
+	printf("3. remove save file\n");
 	printf("3. Back\n");
 	printf("Enter choice: ");
 	int choice;
@@ -55,7 +57,7 @@ void loadSubMenu() {
 	switch (choice) {
 		case 1:
 			// load game
-
+		
 			break;
 		case 2:
 			// delete game
